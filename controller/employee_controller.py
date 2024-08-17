@@ -1,7 +1,8 @@
-from flask import Blueprint, request
+from flask import Blueprint, jsonify, Response
 from flask_pydantic import validate
 from ..entity.employee import RegisterEmployee
 from ..service.employee_service import EmployeeService
+import json
 
 employee = Blueprint('employee', __name__, url_prefix='/employees')
 
@@ -16,9 +17,15 @@ def get_by_id(id):
 @employee.route('/', methods=['POST'])
 @validate()
 def register(body: RegisterEmployee):
+    codeError = 500
     es = EmployeeService()
-    result = es.create(body)
-    return body
+    result, err = es.create(body)
+    if err == 'Username already exists':
+            codeError = 400
+            
+    if not result:
+        return Response(status=codeError, mimetype='application/json', response=json.dumps({'status':'failed','message': err}))
+    return Response(status=200, mimetype='application/json', response=json.dumps({'status':'success', 'message': 'create employee success'}))
 
 @employee.route('/<string:id>', methods=['PUT'])
 def update(id):

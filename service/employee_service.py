@@ -1,7 +1,7 @@
 from ..entity.employee import Employee as EmployeeEntity, RegisterEmployee
 from ..repository.employee_repository import EmployeeRepository
 from ..repository.user_repository import UserRepository
-from ..utils.utilities import generate_id
+from ..utils.utilities import generate_id, hashing_password
 from datetime import datetime as tim
 
 class EmployeeService:
@@ -15,13 +15,15 @@ class EmployeeService:
         return self.model.get_all() 
     
     def create(self, data:RegisterEmployee):
-        dataEmployee = EmployeeEntity(id=generate_id(data.username), name=data.name, gender=data.gender, birthday=data.birthday, created_at=tim.now(), updated_at=tim.now(), username=data.username, password=data.password, role=data.role)
+        result = False
+        err = 'Username already exists'
+
+        pass_hash = hashing_password(data.password)
+        dataEmployee = EmployeeEntity(id=generate_id(data.username), name=data.name, gender=data.gender, birthday=data.birthday, created_at=tim.now(), updated_at=tim.now(), username=data.username, password=pass_hash, role=data.role)
         userCheck = UserRepository().get_by_username(data.username)
         if not userCheck:
-            EmployeeRepository().create(dataEmployee)
-            UserRepository().create(dataEmployee)
-            return True
-        return False
+            result, err = EmployeeRepository().create(dataEmployee)
+        return result, err
     
     def update(self, id, data):
         return self.model.update(id, data)

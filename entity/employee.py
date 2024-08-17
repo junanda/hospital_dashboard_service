@@ -1,0 +1,48 @@
+from pydantic import BaseModel, field_validator
+from datetime import datetime as tim
+from enum import Enum
+
+class Role(str, Enum):
+    employee = 'employee'
+    doctor = 'doctor'
+    admin = 'admin'
+
+class Employee(BaseModel):
+    id: str
+    name: str
+    gender: str
+    birthday: str
+    created_at: tim
+    updated_at: tim
+    username: str
+    password: str
+    role: str
+
+    class Config:
+        from_attributes = True
+
+class RegisterEmployee(BaseModel):
+    name: str
+    gender: str
+    birthday: str
+    username: str
+    password: str
+    role: Role
+
+    # @field_validator('username')
+    # def validate_username(cls, v):
+    #     user = UserRepository().get_by_username(v)
+    #     if user is not None:
+    #         raise json.dumps({'username':'username already exists'})
+    #     return v
+
+    class Config:
+        from_attributes = True
+
+class RequestUpdateEmployee(BaseModel):
+    name: str
+    gender: str
+    birthday: tim
+
+    class Config:
+        from_attributes = True

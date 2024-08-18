@@ -21,5 +21,11 @@ def error_number(err:str) -> int:
     return err_lis[err]
 
 def message_error(err:str, status:str) -> str:
-    err_lis = dict({'not_found': 'Data not found', 'bad_request': 'Bad request', 'failed': 'Failed to {} Data'.format(status)})
+    err_lis = dict(
+        {'not_found': 'Data not found', 
+         'bad_request': 'Bad request', 
+         'failed': 'Failed to {} Data'.format(status), 
+         'username_already_exists': 'Username already exists',
+         'greater_than': 'Value work_start_time cannot be greater than work_end_time',
+         })
     return err_lis[err]

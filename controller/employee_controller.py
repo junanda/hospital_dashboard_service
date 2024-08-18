@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, Response, request
+from flask import Blueprint, Response, request
 from flask_pydantic import validate
 from ..entity.employee import RegisterEmployee, RequestUpdateEmployee
 from ..service.employee_service import EmployeeService
@@ -37,6 +37,7 @@ def register(body: RegisterEmployee):
     return Response(status=200, mimetype='application/json', response=json.dumps({'status':'success', 'message': 'create employee success', 'data': data}))
 
 @employee.route('/<string:id>', methods=['PUT'])
+@validate()
 def update(id:str):
     data = RequestUpdateEmployee(**request.get_json())
     result, data = EmployeeService().update(id, data)

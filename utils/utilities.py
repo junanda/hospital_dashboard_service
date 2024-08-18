@@ -15,3 +15,11 @@ def hashing_password(password:str) -> str:
 def check_password(password:str, hash_pass:str) -> bool:
     bytes = password.encode('utf-8')
     return bcrypt.checkpw(bytes, hash_pass)
+
+def error_number(err:str) -> int:
+    err_lis = dict({'not_found': 404, 'bad_request': 400, 'failed': 500})
+    return err_lis[err]
+
+def message_error(err:str, status:str) -> str:
+    err_lis = dict({'not_found': 'Data not found', 'bad_request': 'Bad request', 'failed': 'Failed to {} Data'.format(status)})
+    return err_lis[err]

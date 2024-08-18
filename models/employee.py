@@ -16,9 +16,15 @@ class Employee(db.Model):
         self.created_at = created_at
         self.updated_at = updated_at
 
-    def get_by_id(self):
-        db_employee = Employee.query.filter_by(Employee.id==self.id).first()
-        return db_employee
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'gender': self.gender,
+            'birthday': str(self.birthday),
+            'created_at': str(self.created_at),
+            'updated_at': str(self.updated_at)
+        }
 
     def __repr__(self):
         return '<Employee %r>' % self.name

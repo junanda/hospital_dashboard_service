@@ -1,5 +1,5 @@
 from pydantic import BaseModel, field_validator
-from datetime import datetime as tim
+from datetime import datetime as tim, date
 from enum import Enum
 
 class Role(str, Enum):
@@ -21,6 +21,17 @@ class Employee(BaseModel):
     class Config:
         from_attributes = True
 
+class EmployeeResult(BaseModel):
+    id: str
+    name: str
+    gender: str
+    birthday: str
+    created_at: str
+    updated_at: str
+
+    class config:
+        from_attributes = True
+
 class RegisterEmployee(BaseModel):
     name: str
     gender: str
@@ -29,20 +40,13 @@ class RegisterEmployee(BaseModel):
     password: str
     role: Role
 
-    # @field_validator('username')
-    # def validate_username(cls, v):
-    #     user = UserRepository().get_by_username(v)
-    #     if user is not None:
-    #         raise json.dumps({'username':'username already exists'})
-    #     return v
-
     class Config:
         from_attributes = True
 
 class RequestUpdateEmployee(BaseModel):
     name: str
     gender: str
-    birthday: tim
+    birthday: str
 
     class Config:
         from_attributes = True

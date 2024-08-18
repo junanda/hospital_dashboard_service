@@ -1,10 +1,9 @@
 from pydantic import BaseModel, field_validator
 from datetime import datetime, time
 from .employee import Role
-from ..repository.user_repository import UserRepository
 
-class Docters(BaseModel):
-    id: int
+class Doctors(BaseModel):
+    id: str
     name: str
     gender: str
     birthday: str
@@ -19,28 +18,29 @@ class Docters(BaseModel):
     class Config:
         from_attributes = True
 
-class RegistrasiDoctor(BaseModel):
+class DoctorResult(BaseModel):
+    id: str
+    name: str
+    gender: str
+    birthday: str
+    created_at: str
+    updated_at: str
+    work_start_time: str
+    work_end_time: str
+
+    class config:
+        from_attributes = True
+
+class RequestRegistrationDoctor(BaseModel):
     name: str
     gender: str
     birthday: str
     username: str
     password: str
-    work_start_time: time
-    work_end_time: time
+    work_start_time: str
+    work_end_time: str
     role: Role
 
-    @field_validator('work_start_time', 'work_end_time')
-    def work_start_time_less_than_work_end_time(cls, v, values):
-        if values['work_start_time'] >= values['work_end_time']:
-            raise ValueError('work_start_time must be less than work_end_time')
-        return v
-    
-    @field_validator('username')
-    def validate_username(cls, v):
-        user = UserRepository().get_by_username(v)
-        if user is not None:
-            raise ValueError('username already exists')
-        return v
 
     class Config:
         from_attributes = True
@@ -48,15 +48,9 @@ class RegistrasiDoctor(BaseModel):
 class RequestUpdateDoctor(BaseModel):
     name: str
     gender: str
-    birthday: datetime
+    birthday: str
     work_start_time: time
     work_end_time: time
-
-    @field_validator('work_start_time', 'work_end_time')
-    def work_start_time_less_than_work_end_time(cls, v, values):
-        if values['work_start_time'] >= values['work_end_time']:
-            raise ValueError('work_start_time must be less than work_end_time')
-        return v
 
     class Config:
         from_attributes = True

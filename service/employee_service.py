@@ -40,11 +40,10 @@ class EmployeeService:
         userCheck = UserRepository().get_by_username(data.username)
         if not userCheck:
             result, err = EmployeeRepository().create(dataEmployee)
-        
-        empl_result = EmployeeRepository().get_by_id(dataEmployee.id)
-
-        dataE = EmployeeResult(id=empl_result.id, name=empl_result.name, gender=empl_result.gender, birthday=str(empl_result.birthday), created_at=str(empl_result.created_at), updated_at=str(empl_result.updated_at))
-        return result, err, dataE.model_dump()
+            empl_result = EmployeeRepository().get_by_id(dataEmployee.id)
+            dataE = EmployeeResult(id=empl_result.id, name=empl_result.name, gender=empl_result.gender, birthday=str(empl_result.birthday), created_at=str(empl_result.created_at), updated_at=str(empl_result.updated_at))
+            return result, err, dataE.model_dump()
+        return result, err, None
     
     def update(self, id, data):
         result = EmployeeRepository().update(id, data)

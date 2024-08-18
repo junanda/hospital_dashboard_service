@@ -1,5 +1,4 @@
 from ..configuration.database.postgree import db
-from .user import User
 
 class Employee(db.Model):
     id = db.Column(db.String(150), primary_key=True)
@@ -17,14 +16,15 @@ class Employee(db.Model):
         self.created_at = created_at
         self.updated_at = updated_at
 
-    def register_employee(self):
-        db.session.add(self)
-        db.session.commit()
-        return True
-    
-    def get_by_id(self):
-        db_employee = Employee.query.filter_by(Employee.id==self.id).first()
-        return db_employee
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'gender': self.gender,
+            'birthday': str(self.birthday),
+            'created_at': str(self.created_at),
+            'updated_at': str(self.updated_at)
+        }
 
     def __repr__(self):
         return '<Employee %r>' % self.name

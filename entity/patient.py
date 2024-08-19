@@ -1,6 +1,5 @@
-from pydantic import BaseModel, field_validator, constr
+from pydantic import BaseModel, constr
 from typing import Optional
-import string
 
 class Patient(BaseModel):
     id: int

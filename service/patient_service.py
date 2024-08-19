@@ -1,5 +1,7 @@
 from ..repository.patient_repository import PatientRepository
+from ..repository.appointment_repository import AppointmentRepository
 from ..entity.patient import ResponsePatient
+from ..entity.appointment import AppointmentResult
 
 class PatientService:
     def __init__(self):
@@ -7,8 +9,14 @@ class PatientService:
 
     def get_by_id(self, id):
         result = PatientRepository().get_by_id(id)
+        appoint_data = []
         if result is not None:
-            return ResponsePatient(
+            appoint_patient = AppointmentRepository().get_by_patient(id)
+            if len(appoint_patient) > 0:
+                appoint_data = [AppointmentResult(
+                    id_appointment=row.id, id_patient=row.patient_id, id_doctor=row.doctor_id, datetime=str(row.datetime), status=row.status, diagnose=row.diagnose, notes=row.notes
+                ) for row in appoint_patient]
+            data = ResponsePatient(
                 id_pasien=result.id,
                 name=result.name,
                 gender=result.gender,
@@ -18,8 +26,10 @@ class PatientService:
                 vaccine_type=result.vaccine_type,
                 vaccine_count=result.vaccine_count,
                 created_at=str(result.created_at),
-                updated_at=str(result.updated_at)
+                updated_at=str(result.updated_at),
+                appointment= appoint_data
             ).model_dump()
+            return data
         return result
     
     def get_all(self):

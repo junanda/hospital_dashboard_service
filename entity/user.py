@@ -13,7 +13,7 @@ class User(BaseModel):
         from_attributes = True
 
 
-class RequestUser(BaseModel):
+class RequestLogin(BaseModel):
     username: str
     password: str
 

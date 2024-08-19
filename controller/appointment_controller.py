@@ -2,17 +2,20 @@ from flask import Blueprint, request, Response
 from flask_pydantic import validate
 from ..entity.appointment import RequestAppointment, RequestUpdateAppointment
 from ..service.appointment_service import AppointmentService
+from ..utils.utilities import authentication
 import json
 
 
 appointment = Blueprint('appointment', __name__, url_prefix='/appointments')
 
 @appointment.route('/', methods=['GET'])
+@authentication
 def index():
     result = AppointmentService().get_all()
     return Response(status=200, mimetype='application/json', response=json.dumps({'status':'success', 'message': 'get all appointment', 'data': result}))
 
 @appointment.route('/', methods=['POST'])
+@authentication
 @validate()
 def register(body: RequestAppointment):
     result, err, data = AppointmentService().create(body)
@@ -21,6 +24,7 @@ def register(body: RequestAppointment):
     return Response(status=200, mimetype='application/json', response=json.dumps({'status':'success', 'message': 'create appointment success', 'data': data}))
 
 @appointment.route('/<string:id>', methods=['GET'])
+@authentication
 def get_by_id(id):
     result = AppointmentService().get_by_id(id)
     if result is not None:
@@ -28,6 +32,7 @@ def get_by_id(id):
     return Response(status=404, mimetype='application/json', response=json.dumps({'status':'failed', 'message': 'appointment not found'}))
 
 @appointment.route('/<string:id>', methods=['PUT'])
+@authentication
 def update(id):
     data = RequestUpdateAppointment(**request.get_json())
     result, _, data = AppointmentService().update(id, data)
@@ -36,6 +41,7 @@ def update(id):
     return Response(status=200, mimetype='application/json', response=json.dumps({'status':'success', 'message': 'update appointment success', 'data': data}))
 
 @appointment.route('/<string:id>', methods=['DELETE'])
+@authentication
 def delete(id):
     _, err = AppointmentService().delete(id)
     if err is not None:

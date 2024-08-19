@@ -7,7 +7,8 @@ class UserRepository:
         pass
     
     def get_by_traceid(self, id:str):
-        return self.model.get_by_id(id)
+        result = User.query.filter_by(id_trace=id).first()
+        return result
     
     def get_by_username(self, username: str):
         userdb = User.query.filter_by(username=username).first()
@@ -16,9 +17,3 @@ class UserRepository:
     def create(self, data):
         user = User(data.id, data.username, data.password, data.role, tim.now(), tim.now())
         return user.create()
-    
-    def update(self, id, data):
-        return self.model.update(id, data)
-    
-    def delete(self, id):
-        return self.model.delete(id)

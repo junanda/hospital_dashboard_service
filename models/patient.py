@@ -7,8 +7,8 @@ class Patients(db.Model):
     birthday = db.Column(db.Date, nullable=False)
     no_ktp = db.Column(db.String(20), nullable=False)
     address = db.Column(db.Text, nullable=False)
-    vaccine_type = db.Column(db.String(80), nullable=False)
-    vaccine_count = db.Column(db.Integer, nullable=False)
+    vaccine_type = db.Column(db.String(80), nullable=True)
+    vaccine_count = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
 

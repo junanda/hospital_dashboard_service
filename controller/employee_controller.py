@@ -2,12 +2,13 @@ from flask import Blueprint, Response, request
 from flask_pydantic import validate
 from ..entity.employee import RegisterEmployee, RequestUpdateEmployee
 from ..service.employee_service import EmployeeService
-from ..utils.utilities import error_number, message_error
+from ..utils.utilities import error_number, message_error, authentication
 import json
 
 employee = Blueprint('employee', __name__, url_prefix='/employees')
 
 @employee.route('/', methods=['GET'])
+@authentication
 def index():
     result = EmployeeService().get_all()
     return Response(status=200, mimetype='application/json', response=json.dumps(
@@ -18,6 +19,7 @@ def index():
     ))
 
 @employee.route('/<string:id>', methods=['GET'])
+@authentication
 def get_by_id(id):
     result = EmployeeService().get_by_id(id)
     if result is not None:
@@ -25,6 +27,7 @@ def get_by_id(id):
     return Response(status=404, mimetype='application/json', response=json.dumps({'status':'failed', 'message': 'employee not found'}))
 
 @employee.route('/', methods=['POST'])
+@authentication
 @validate()
 def register(body: RegisterEmployee):
     codeError = 500
@@ -37,6 +40,7 @@ def register(body: RegisterEmployee):
     return Response(status=200, mimetype='application/json', response=json.dumps({'status':'success', 'message': 'create employee success', 'data': data}))
 
 @employee.route('/<string:id>', methods=['PUT'])
+@authentication
 @validate()
 def update(id:str):
     data = RequestUpdateEmployee(**request.get_json())
@@ -46,6 +50,7 @@ def update(id:str):
     return Response(status=200, mimetype='application/json', response=json.dumps({'status':'success', 'message': 'update employee success', 'data': data}))
 
 @employee.route('/<string:id>', methods=['DELETE'])
+@authentication
 def delete(id):
     if not id:
         return Response(status=error_number('not_found'), mimetype='application/json', response=json.dumps({'status':'failed', 'message': 'Employee not found'}))

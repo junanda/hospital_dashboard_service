@@ -1,5 +1,5 @@
-from pydantic import BaseModel, field_validator
-from datetime import datetime as tim, date
+from pydantic import BaseModel
+from datetime import datetime as tim
 from enum import Enum
 
 class Role(str, Enum):

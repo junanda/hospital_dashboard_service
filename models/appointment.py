@@ -6,7 +6,7 @@ class Appointment(db.Model):
     patient_id = db.Column(db.Integer, nullable=False)
     doctor_id = db.Column(db.String(150), nullable=False)
     datetime = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.Enum('in_queue', 'done', 'canceled',name="status_appointment"), nullable=False, default='in_queue')
+    status = db.Column(db.Enum('in_queue', 'done', 'canceled',name="status_appointment"), nullable=True, default=None)
     diagnose = db.Column(db.Text, nullable=True)
     notes = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, nullable=False)
@@ -23,7 +23,7 @@ class Appointment(db.Model):
         self.updated_at = updated_at
     
     def get_by_id(self):
-        db_appointment = Appointment.query.filter_by(Appointment.id==self.id).first()
+        db_appointment = Appointment.query.filter_by(id=self.id).first()
         return db_appointment
     
     def __repr__(self) -> str:

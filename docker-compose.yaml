@@ -10,6 +10,8 @@ services:
       - .env.db.local
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - common-net
 
   flask-app:
     container_name: flask_api
@@ -21,7 +23,12 @@ services:
       - .env
     depends_on:
       - flask-db
+    networks:
+      - common-net
 
 volumes:
   pgdata: {}
+
+networks:
+  common-net: {}
 
